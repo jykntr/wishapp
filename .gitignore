@@ -73,7 +73,7 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *,cover
-tmp
+coverage/
 
 # Translations
 *.mo
