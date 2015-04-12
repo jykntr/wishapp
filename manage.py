@@ -90,5 +90,18 @@ def build(coverage=False):
         sys.exit(1)
 
 
+@manager.command
+def deploy():
+    """Run deployment tasks."""
+    from flask.ext.migrate import upgrade
+    from app.models import Role
+
+    # migrate database to latest revision
+    upgrade()
+
+    # create user roles
+    Role.insert_roles()
+
+
 if __name__ == '__main__':
     manager.run()
