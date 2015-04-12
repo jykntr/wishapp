@@ -5,6 +5,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+    SQLALCHEMY_RECORD_QUERIES = True
     MAIL_SERVER = 'smtp.googlemail.com'
     MAIL_PORT = 587
     MAIL_USE_TLS = True
@@ -13,6 +14,7 @@ class Config:
     FLASKAPP_MAIL_SUBJECT_PREFIX = '[FlaskApp]'
     FLASKAPP_MAIL_SENDER = 'FlaskApp Admin <someone@gmail.com>'
     FLASKAPP_ADMIN = os.environ.get('FLASKAPP_ADMIN')
+    FLASKY_SLOW_DB_QUERY_TIME = 0.5
 
     @staticmethod
     def init_app(app):
