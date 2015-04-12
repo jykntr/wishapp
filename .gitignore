@@ -88,3 +88,6 @@ target/
 # Sqlite
 *.sqlite
 
+# Heroku
+.env
+
