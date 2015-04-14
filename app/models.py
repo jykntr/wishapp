@@ -52,6 +52,23 @@ class User(UserMixin, db.Model):
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
 
+    @staticmethod
+    def generate_dev_users():
+        from sqlalchemy.exc import IntegrityError
+
+        admin_role = Role.query.filter_by(permissions=0xff).first()
+        u = User(email='admin@example.com',
+                 username='admin',
+                 password='admin',
+                 confirmed=True,
+                 name='Trusty Admin')
+        u.role = admin_role
+        db.session.add(u)
+        try:
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
         if self.role is None:
