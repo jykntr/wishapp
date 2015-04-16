@@ -1,2 +1,135 @@
 # flaskapp
-Waffle board status: [![Ready](https://badge.waffle.io/jykntr/flaskapp.svg?label=ready&title=Ready)](http://waffle.io/jykntr/flaskapp) [![In Progress](https://badge.waffle.io/jykntr/flaskapp.svg?label=in+progress&title=In+Progress)](http://waffle.io/jykntr/flaskapp)
+
+Waffle board status: 
+[![Ready](https://badge.waffle.io/jykntr/flaskapp.svg?label=ready&title=Ready)](http://waffle.io/jykntr/flaskapp)
+[![In Progress](https://badge.waffle.io/jykntr/flaskapp.svg?label=in+progress&title=In+Progress)](http://waffle.io/jykntr/flaskapp)
+
+## About 
+
+Flaskapp is simply a barebones application to use as a starting point
+for a Flask web application.  It is based off of the Flask Web Development
+book by Miguel Grinberg.  More info can be found at http://flaskbook.com.
+
+The application includes basics such as user registration/confirmation,
+password resets, profile management, etc.  It also can easily be deployed to
+[Heroku](http://heroku.com).
+
+## Heroku Support 
+
+### Initial Heroku setup 
+
+You must first create an account on [Heroku](http://heroku.com) if you don't 
+already have one, and then install the [Heroku Toolbelt](https://toolbelt.heroku.com)
+
+* Log into Heroku:
+
+ ```
+ $ heroku login
+ Enter your Heroku credentials.
+ Email: ...
+ Password (typing will be hidden):
+ Authentication successful.
+ ```
+
+* Create an application:
+
+ ```
+ $ heroku create <custom_app_name>
+ Creating <custom_app_name>... done, stack is cedar
+ http://<custom_app_name>.herokuapp.com/ | git@heroku.com:<custom_app_name>.git
+ Git remote heroku added
+ ```
+
+* Create a databse for your application:
+
+ ```
+ $ heroku addons:add heroku-postgresql:dev
+ Adding heroku-postgresql:dev on <custom_app_name>... done, v3 (free)
+ Attached as HEROKU_POSTGRESQL_RED_URL
+ Database has been created and is available
+ ! This database is empty. If upgrading, you can transfer
+ ! data from another database with pgbackups:restore.
+ Use `heroku addons:docs heroku-postgresql:dev` to view documentation.
+ ```
+
+ Promote the database, it's URL will be exposed in an environment variable 
+ named ```DATABASE_URL``` that will be picked up by the application.
+
+ ```
+ $ heroku pg:promote HEROKU_POSTGRESQL_RED_URL 
+ ```
+
+* Setup Heroku environment:
+
+ Set the required environment variables on the Heroku server.  Start the the 
+ ```FLASK_CONFIG``` variable which indicates which configuration the 
+ application should use.
+
+ ```
+ $ heroku config:set FLASK_CONFIG=heroku
+ Setting config vars and restarting <custom_app_name>... done, v4
+ FLASK_CONFIG: heroku
+ ```
+
+ Next add your mail server information.
+
+ ```
+ $ heroku config:set MAIL_USERNAME=<your-gmail-username>
+ $ heroku config:set MAIL_PASSWORD=<your-gmail-password>
+ ```
+
+### Deploying and/or upgrading your application to Heroku
+
+Optionally move your application into maintenance mode.  This will make Heroku
+show users a static page indicating the application is down for maintenance.
+Then push your application to Heroku, run the ```deploy``` command and restart
+the application.
+
+```
+$ heroku maintenance:on  # Turn maintenance mode on
+$ git push heroku master  # Deploys your application to Heroku
+$ heroku run python manage.py deploy  # sets things up such as the database
+$ heroku restart
+$ heroku maintenance:off  # Turns off maintenance mode
+```
+
+### Testing your Heroku config locally
+
+The [Heroku Toolbelt](https://toolbelt.heroku.com) installs a command named
+```foreman``` which can be used to test in an environment more similar to
+Heroku. ```foreman``` can set the environment variables normally found on the
+Heroku server by reading them from a file named ```.env``` in the root
+directory.   Create a ```.env``` file that looks similar to the following:
+
+```
+FLASK_CONFIG=heroku
+MAIL_USERNAME=<your-username>
+MAIL_PASSWORD=<your-password>
+SSL_DIASABLE=true
+```
+
+The ```foreman``` command can run any arbitrary command in a Heroku-like
+environment.  It can be used for things such as testing the ```deploy```
+command:
+
+```
+$ foreman run python manage.py deploy
+```
+
+To test starting the server like it will be started on Heroku run the 
+following:
+
+```
+$ foreman start
+22:55:08 web.1 | started with pid 4246
+22:55:08 web.1 | 2013-12-03 22:55:08 [4249] [INFO] Starting gunicorn 18.0
+22:55:08 web.1 | 2013-12-03 22:55:08 [4249] [INFO] Listening at: http://...
+22:55:08 web.1 | 2013-12-03 22:55:08 [4249] [INFO] Using worker: sync
+22:55:08 web.1 | 2013-12-03 22:55:08 [4254] [INFO] Booting worker with pid: 4254
+```
+
+### Viewing Heroku logs
+
+Logging is captured by Heroku.  To view the log statements run ```$ heroku
+log``` or to tail the logs ```$ heroku log -t```.
+
