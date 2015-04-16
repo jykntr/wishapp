@@ -14,11 +14,6 @@ gunicorn==19.3.0
 psycopg2==2.6
 Flask-SSLify==0.1.5
 
-# Development and testing
-coverage==3.7.1
-flake8==2.4.0
-piprot==0.9.1
-
 # Dependencies
 alembic==0.7.5.post2
 blinker==1.3

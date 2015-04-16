@@ -1,0 +1,6 @@
+-r requirements.txt
+
+# Development and testing
+coverage==3.7.1
+flake8==2.4.0
+piprot==0.9.1

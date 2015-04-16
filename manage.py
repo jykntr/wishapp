@@ -76,7 +76,7 @@ def piprot():
     """Run piprot"""
     from subprocess import call
     print('piprot checking:')
-    retval = call(['piprot', 'requirements.txt'])
+    retval = call(['piprot', 'requirements/dev-requirements.txt'])
     if retval is 0:
         return True
     else:
