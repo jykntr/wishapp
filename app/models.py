@@ -1,7 +1,8 @@
 from datetime import datetime
+import hashlib
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from flask import current_app
+from flask import current_app, request
 from flask.ext.login import UserMixin, AnonymousUserMixin
 from . import db, login_manager
 
@@ -51,6 +52,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(64))
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
+    avatar_hash = db.Column(db.String(32))
 
     @staticmethod
     def generate_dev_users():
@@ -76,6 +78,9 @@ class User(UserMixin, db.Model):
                 self.role = Role.query.filter_by(permissions=0xff).first()
             if self.role is None:
                 self.role = Role.query.filter_by(default=True).first()
+        if self.email is not None and self.avatar_hash is None:
+            self.avatar_hash = hashlib.md5(
+                self.email.encode('utf-8')).hexdigest()
 
     @property
     def password(self):
@@ -138,6 +143,7 @@ class User(UserMixin, db.Model):
         if self.query.filter_by(email=new_email).first() is not None:
             return False
         self.email = new_email
+        self.avatar_hash = hashlib.md5(self.email.encode('utf-8')).hexdigest()
         db.session.add(self)
         return True
 
@@ -152,11 +158,22 @@ class User(UserMixin, db.Model):
         self.last_seen = datetime.utcnow()
         db.session.add(self)
 
+    def gravatar(self, size=256):
+        if request.is_secure:
+            url = 'https://robohash.org'
+        else:
+            url = 'http://robohash.org'
+        hash = self.avatar_hash or hashlib.md5(
+            self.email.encode('utf-8')).hexdigest()
+        return '{url}/{hash}?size={size}x{size}&bgset=any&gravatar=hashed'\
+            .format(url=url, hash=hash, size=size)
+
     def __repr__(self):
         return '<User %r>' % self.username
 
 
 class AnonymousUser(AnonymousUserMixin):
+
     def can(self, permissions):
         return False
 
