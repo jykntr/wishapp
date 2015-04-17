@@ -3,11 +3,52 @@
 
 {% block title %}FlaskApp - Edit Profile{% endblock %}
 
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+{% endblock %}
+
 {% block page_content %}
 <div class="page-header">
     <h1>Edit Your Profile</h1>
 </div>
 <div class="col-md-4">
-    {{ wtf.quick_form(form) }}
+    <form method="POST" action="{{ url_for('main.edit_profile') }}">
+        {{ form.hidden_tag() }}
+        {{ wtf.form_errors(form, hiddens="only") }}
+        {{ wtf.form_field(form.name) }}
+        <p class="text-muted">Manage your avatar using <a href="http://gravatar.com">Gravatar</a>.
+        <a href="#" data-toggle="modal" data-target="#basicModal"><i class="fa fa-question-circle"></i></a>
+        </p>
+        {{ wtf.form_field(form.submit) }}
+    </form>
+</div>
+
+<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Avatar Information</h4>
+            </div>
+            <div class="modal-body">
+                <p>Avatars are provided by <a href="http://robohash.org">Robohash</a> and <a href="http://gravatar.com">Gravatar</a>.</p>
+                <p>If you haven't configured an avatar on the Gravatar website a default <a href="http://robohash.org">Robohash</a>
+                avatar will be created for you. Robohash generates an avatar based on an MD5 hash computed from your email address.
+                Your real email address isn't used to keep it private. If you change your email address your avatar will also change.
+                </p>
+                <p>To use an avatar of your choice, create an account on <a href="http://gravatar.com">Gravatar</a> and configure an
+                avatar.  When you come back to this website you will see it being used automatically.
+                </p>
+                <p>For more information on how to setup a Gravatar account click
+                <a href="https://en.gravatar.com/support/how-to-sign-up/">here</a>.  It is easiest if you use the same email address
+                as you used for this account, but it is possible to configure additional email addresses for your Gravatar account.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
