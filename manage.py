@@ -52,7 +52,11 @@ def test(coverage=False):
         COV.html_report(directory=covdir)
         print('HTML version: file://%s/index.html' % covdir)
         COV.erase()
-    return result.wasSuccessful()
+
+    if result.wasSuccessful:
+        return 0
+    else:
+        return 1
 
 
 @manager.command
@@ -60,15 +64,11 @@ def flake8():
     """Run flake8 tests"""
     from subprocess import call
     print('flake8 checking:')
-    retval = call(['flake8',
-                   '.',
-                   '--exclude=.git,__pycache__,migrations',
-                   '--show-source',
-                   '--verbose'])
-    if retval is 0:
-        return True
-    else:
-        return False
+    return call(['flake8',
+                 '.',
+                 '--exclude=.git,__pycache__,migrations',
+                 '--show-source',
+                 '--verbose'])
 
 
 @manager.command
@@ -76,25 +76,20 @@ def piprot():
     """Run piprot"""
     from subprocess import call
     print('piprot checking:')
-    retval = call(['piprot', 'requirements/dev-requirements.txt'])
-    if retval is 0:
-        return True
-    else:
-        return False
+    return call(['piprot', 'requirements/dev-requirements.txt'])
 
 
 @manager.command
 def build(coverage=False):
     """Run all tests for the full build."""
-    passing = True
-    passing = passing & test(coverage)
+    retval = 0
+    retval += test(coverage)
     print('')
-    passing = passing & flake8()
+    retval += flake8()
     print('')
     piprot()  # Don't fail build because of old requirements.txt
 
-    if not passing:
-        sys.exit(1)
+    sys.exit(retval)
 
 
 @manager.command
