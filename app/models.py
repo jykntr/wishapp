@@ -58,14 +58,26 @@ class User(UserMixin, db.Model):
     def generate_dev_users():
         from sqlalchemy.exc import IntegrityError
 
+        # Add administrator user
         admin_role = Role.query.filter_by(permissions=0xff).first()
-        u = User(email='admin@example.com',
-                 username='admin',
-                 password='admin',
-                 confirmed=True,
-                 name='Trusty Admin')
-        u.role = admin_role
-        db.session.add(u)
+        admin = User(email='admin@example.com',
+                     username='admin',
+                     password='admin',
+                     confirmed=True,
+                     name='Trusty Admin')
+        admin.role = admin_role
+        db.session.add(admin)
+
+        # Add regular users
+        names = ['john', 'jack']
+        for name in names:
+            user = User(email=name + '@example.com',
+                        username=name,
+                        password=name,
+                        confirmed=True,
+                        name=name)
+            db.session.add(user)
+
         try:
             db.session.commit()
         except IntegrityError:
