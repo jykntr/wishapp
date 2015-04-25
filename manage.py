@@ -76,7 +76,7 @@ def piprot():
     """Run piprot"""
     from subprocess import call
     print('piprot checking:')
-    return call(['piprot', 'requirements/dev-requirements.txt'])
+    return call(['piprot', 'dev-requirements.txt'])
 
 
 @manager.command
