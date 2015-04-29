@@ -10,14 +10,18 @@
 
 {% block page_content %}
 <div class="page-header">
-    <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=256) }}">
-    <div class="profile-header">
-        <h1>{{ user.username }}</h1>
-        {{ wtf.quick_form(form) }}
-        <p/>
-        <p class="text-muted">Manage your avatar using <a href="http://gravatar.com">Gravatar</a>.
-            <a href="#" data-toggle="modal" data-target="#basicModal"><i class="fa fa-question-circle"></i></a>
-        </p>
+    <div class="row">
+        <div class="col-xs-4">
+            <img class="img-rounded img-responsive" src="{{ user.gravatar(size=256) }}">
+        </div>
+        <div class="col-xs-8">
+            <h1>{{ user.username }}</h1>
+            {{ wtf.quick_form(form) }}
+            <p/>
+            <p class="text-muted">Manage your avatar using <a href="http://gravatar.com">Gravatar</a>.
+                <a href="#" data-toggle="modal" data-target="#basicModal"><i class="fa fa-question-circle"></i></a>
+            </p>
+        </div>
     </div>
 </div>
 
