@@ -14,6 +14,30 @@ The application includes basics such as user registration/confirmation,
 password resets, profile management, etc.  It also can easily be deployed to
 [Heroku](http://heroku.com).
 
+## Customizing
+
+### Templates
+
+You will want to change the application name in all of the templates located in
+the ```app/templates``` directory and all it's subdirectories as well.  For the
+most part, a simple search and replace on the string ```FlaskApp``` should
+find everything you need to change.
+
+### Configuration
+
+Update the ```config.py``` file with your mail server information.
+
+For convenience, a ```.env``` file can be populated with values for environment
+variables.  These environment variables will be set before the application
+starts.  An example ```.env``` file for development might look like this:
+
+```
+FLASK_CONFIG=development
+MAIL_USERNAME=username@example.xom
+MAIL_PASSWORD=password
+SSL_DISABLE=true
+```
+
 ## Heroku Support 
 
 ### Initial Heroku setup 
