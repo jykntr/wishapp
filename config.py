@@ -12,8 +12,8 @@ class Config:
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    MAIL_SUBJECT_PREFIX = '[FlaskApp]'
-    MAIL_SENDER = 'FlaskApp Admin <someone@gmail.com>'
+    MAIL_SUBJECT_PREFIX = '[Wishlist]'
+    MAIL_SENDER = 'Wishlist Admin <someone@gmail.com>'
     ADMIN_USER = os.environ.get('ADMIN_USER')
     FLASKY_SLOW_DB_QUERY_TIME = 0.5
 
